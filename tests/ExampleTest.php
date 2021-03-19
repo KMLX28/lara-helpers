@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\Skeleton\Tests;
+namespace Muhammedalkhudiry\LaraHelpers\Tests;
 
 use PHPUnit\Framework\TestCase;
 

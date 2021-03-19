@@ -1,21 +1,22 @@
 {
-    "name": ":vendor_name/:package_name",
-    "description": ":package_description",
+    "name": "muhammedalkhudiry/lara-helpers",
+    "description": "lara-helpers",
     "keywords": [
-        ":vendor_name",
-        ":package_name"
+        "muhammedalkhudiry",
+        "lara-helpers"
     ],
-    "homepage": "https://github.com/:vendor_name/:package_name",
+    "homepage": "https://github.com/muhammedalkhudiry/lara-helpers",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": ":author_email",
+            "name": "Muhammed",
+            "email": "muhamdkudiry@gmail.com",
             "role": "Developer"
         }
     ],
     "require": {
-        "php": "^7.4|^8.0"
+        "php": "^7.4|^8.0",
+        "illuminate/http": "^8.33"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.17",
@@ -25,12 +26,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Spatie\\Skeleton\\": "src"
+            "Muhammedalkhudiry\\LaraHelpers\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Spatie\\Skeleton\\Tests\\": "tests"
+            "Muhammedalkhudiry\\LaraHelpers\\Tests\\": "tests"
         }
     },
     "scripts": {
