@@ -25,6 +25,9 @@
         "vimeo/psalm": "^4.3"
     },
     "autoload": {
+        "files": [
+            "src/util/helpers.php"
+        ],
         "psr-4": {
             "Muhammedalkhudiry\\LaraHelpers\\": "src"
         }
