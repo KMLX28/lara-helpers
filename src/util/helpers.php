@@ -8,13 +8,14 @@ if (! function_exists('fake_file')) {
     /**
      * @param string $path
      * @param bool $stored
+     * @param $format
      * @return false|\Illuminate\Http\Testing\File|string
      */
-    function x_fake_file(string $path = 'image', $stored = false)
+    function x_fake_file(string $path = 'image', $stored = false, $format = 'png')
     {
         return $stored ?
-            UploadedFile::fake()->create("{$path}.png")->storePublicly("{$path}s", 'public') :
-            UploadedFile::fake()->create("{$path}.png");
+            UploadedFile::fake()->create("{$path}.$format")->storePublicly("{$path}s", 'public') :
+            UploadedFile::fake()->create("{$path}.$format");
     }
 }
 
