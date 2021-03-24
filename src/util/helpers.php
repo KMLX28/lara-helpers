@@ -2,6 +2,8 @@
 
 
 use GeniusTS\HijriDate\Hijri;
+use Illuminate\Http\UploadedFile;
+use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 
 if (!function_exists('_fake_file')) {
     /**
@@ -51,6 +53,16 @@ if (!function_exists('_delete_file')) {
         if (!Storage::disk('public')->delete($path)) {
             throw new FileNotFoundException($path);
         }
+    }
+}
+
+if (!function_exists('_assert_file')) {
+    function _assert_file(UploadedFile $file, string $folderName = null, bool $public = true)
+    {
+        $public = $public ? 'public/' : '';
+        $folderName ??= "{$file->getFilename()}s";
+
+        Storage::assertExists("{$public}{$folderName}/{$file->hashName()}");
     }
 }
 
