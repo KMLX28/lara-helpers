@@ -7,5 +7,5 @@ Collection of helpers for Laravel
 You can install the package via composer:
 
 ```bash
-composer require muhammedalkhudiry/lara-helpers
+composer require muhammed-alkhudiry/lara-helpers
 ```
