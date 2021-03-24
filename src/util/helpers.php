@@ -9,14 +9,17 @@ if (!function_exists('_fake_file')) {
     /**
      * @param string $path
      * @param bool $stored
-     * @param $format
+     * @param bool $image
+     * @param string $format
      * @return false|\Illuminate\Http\Testing\File|string
      */
-    function _fake_file(string $path = 'image', $stored = false, $format = 'png')
+    function _fake_file(string $path = 'image', bool $stored = false, bool $image = true, $format = 'png')
     {
+        $imageOrFileMethod = $image ? 'image' : 'create';
+
         return $stored ?
-            UploadedFile::fake()->create("{$path}.$format")->storePublicly("{$path}s", 'public') :
-            UploadedFile::fake()->create("{$path}.$format");
+            UploadedFile::fake()->{$imageOrFileMethod}("$path.$format")->storePublicly("{$path}s", 'public') :
+            UploadedFile::fake()->{$imageOrFileMethod}("$path.$format");
     }
 }
 
@@ -32,12 +35,12 @@ if (!function_exists('_success_msg')) {
     }
 }
 
-if (!function_exists('_image_path')) {
+if (!function_exists('_file_path')) {
     /**
      * @param string|null $path
      * @return string
      */
-    function _image_path(?string $path)
+    function _file_path(?string $path)
     {
         return $path ? asset("storage/$path") : null;
     }
@@ -60,9 +63,10 @@ if (!function_exists('_assert_file')) {
     function _assert_file(UploadedFile $file, string $folderName = null, bool $public = true)
     {
         $public = $public ? 'public/' : '';
-        $folderName ??= "{$file->getFilename()}s";
+        $fileName = explode('.', $file->getClientOriginalName())[0];
+        $folderName ??= Str::plural($fileName) . '/';
 
-        Storage::assertExists("{$public}{$folderName}/{$file->hashName()}");
+        Storage::assertExists("{$public}{$folderName}{$file->hashName()}");
     }
 }
 
