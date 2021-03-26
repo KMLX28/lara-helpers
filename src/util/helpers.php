@@ -104,3 +104,10 @@ if (!function_exists('_hijri')) {
         return Hijri::convertToHijri($date)->format('Y-m-d');
     }
 }
+
+if (!function_exists('_random_saudi_mobile')) {
+    function _random_saudi_mobile()
+    {
+        return '0504127' . random_int(100, 999);
+    }
+}
