@@ -111,3 +111,11 @@ if (!function_exists('_random_saudi_mobile')) {
         return '0504127' . random_int(100, 999);
     }
 }
+
+if (!function_exists('_current_guard')) {
+    function _current_guard()
+    {
+        return collect(array_keys(config('auth.guards')))
+            ->first(fn($guard) => auth()->guard($guard)->check());
+    }
+}
