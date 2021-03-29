@@ -5,21 +5,33 @@ use GeniusTS\HijriDate\Hijri;
 use Illuminate\Http\UploadedFile;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 
+if (!function_exists('_fake_image')) {
+    /**
+     * @param string $path
+     * @param bool $stored
+     * @param string $format
+     * @return false|\Illuminate\Http\Testing\File|string
+     */
+    function _fake_image(string $path = 'image', bool $stored = false, $format = 'png')
+    {
+        return $stored ?
+            UploadedFile::fake()->image("$path.$format")->storePublicly("{$path}s", 'public') :
+            UploadedFile::fake()->image("$path.$format");
+    }
+}
+
 if (!function_exists('_fake_file')) {
     /**
      * @param string $path
      * @param bool $stored
-     * @param bool $image
      * @param string $format
      * @return false|\Illuminate\Http\Testing\File|string
      */
-    function _fake_file(string $path = 'image', bool $stored = false, bool $image = true, $format = 'png')
+    function _fake_file(string $path = 'file', bool $stored = false, $format = 'pdf')
     {
-        $imageOrFileMethod = $image ? 'image' : 'create';
-
         return $stored ?
-            UploadedFile::fake()->{$imageOrFileMethod}("$path.$format")->storePublicly("{$path}s", 'public') :
-            UploadedFile::fake()->{$imageOrFileMethod}("$path.$format");
+            UploadedFile::fake()->create("$path.$format")->storePublicly("{$path}s", 'public') :
+            UploadedFile::fake()->create("$path.$format");
     }
 }
 
@@ -35,12 +47,12 @@ if (!function_exists('_success_msg')) {
     }
 }
 
-if (!function_exists('_file_path')) {
+if (!function_exists('_public_file_path')) {
     /**
      * @param string|null $path
      * @return string
      */
-    function _file_path(?string $path)
+    function _public_file_path(?string $path)
     {
         return $path ? asset("storage/$path") : null;
     }
@@ -49,18 +61,18 @@ if (!function_exists('_file_path')) {
 if (!function_exists('_delete_file')) {
     /**
      * @param string|null $path
-     * @throws FileNotFoundException
+     * @param string $disk
      */
-    function _delete_file(?string $path)
+    function _delete_file(string $path, string $disk = 'public')
     {
-        if (!Storage::disk('public')->delete($path)) {
+        if (!Storage::disk($disk)->delete($path)) {
             throw new FileNotFoundException($path);
         }
     }
 }
 
-if (!function_exists('_assert_file')) {
-    function _assert_file(UploadedFile $file, string $folderName = null, bool $public = true)
+if (!function_exists('_assert_file_exist')) {
+    function _assert_file_exist(UploadedFile $file, string $folderName = null, bool $public = true)
     {
         $public = $public ? 'public/' : '';
         $fileName = explode('.', $file->getClientOriginalName())[0];
@@ -105,6 +117,20 @@ if (!function_exists('_hijri')) {
     }
 }
 
+if (!function_exists('_mysql_update_enum')) {
+
+    /**
+     * @param string $table
+     * @param string $column
+     * @param array $newTypes
+     */
+    function _mysql_update_enum(string $table, string $column, array $newTypes)
+    {
+        DB::statement('ALTER TABLE' . $table . 'MODIFY' . "`$column`" . 'ENUM(' .
+            "'" . implode("','", $newTypes) . "'" . ');');
+    }
+}
+
 if (!function_exists('_random_saudi_mobile')) {
     function _random_saudi_mobile()
     {
@@ -115,7 +141,15 @@ if (!function_exists('_random_saudi_mobile')) {
 if (!function_exists('_current_guard')) {
     function _current_guard()
     {
-        return collect(array_keys(config('auth.guards')))
+        return collect(config('auth.guards'))
+            ->keys()
             ->first(fn($guard) => auth()->guard($guard)->check());
+    }
+}
+
+if (!function_exists('_current_auth')) {
+    function _current_auth()
+    {
+        return auth(_current_guard());
     }
 }
