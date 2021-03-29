@@ -86,6 +86,7 @@ if (!function_exists('_gregorian')) {
     /**
      *
      * @param string $date
+     * @example 1400/0/0
      * @return string
      */
     function _gregorian(string $date)
