@@ -6,6 +6,7 @@ use Illuminate\Http\UploadedFile;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 
 if (!function_exists('_fake_image')) {
+
     /**
      * @param string $path
      * @param bool $stored
@@ -84,21 +85,24 @@ if (!function_exists('_assert_file_exist')) {
 
 if (!function_exists('_gregorian')) {
     /**
-     *
      * @param string $date
-     * @example 1400/0/0
      * @return string
+     * @example 1400/0/0
      */
     function _gregorian(string $date)
     {
-        if (!$date) return null;
-
         $array = explode('/', $date);
+
+        if (count($array) !== 3) {
+            throw new InvalidArgumentException('date should be xxxx/xx/xx');
+        }
+
         $dateAsArray = [
             'year' => $array[0],
             'month' => $array[1],
             'day' => $array[2],
         ];
+
         return Hijri::convertToGregorian(
             $dateAsArray['day'],
             $dateAsArray['month'],
